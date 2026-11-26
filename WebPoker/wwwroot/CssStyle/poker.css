@@ -1,0 +1,402 @@
+:root {
+    color-scheme: dark;
+    font: 100%/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    --background: #090e0c;
+    --text: #f8eddb;
+    --muted: #c6c7b5;
+    --gold: #e8c085;
+    --gold-light: #f6d69e;
+    --outline: #5e5541;
+    --display-font: Georgia, "Times New Roman", serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text);
+    background:
+        radial-gradient(ellipse at 72% -12%, #29382a 0%, transparent 57%),
+        radial-gradient(ellipse at 2% 74%, #111e17 0%, transparent 56%),
+        var(--background);
+}
+
+.site-frame {
+    width: min(77.5rem, calc(100% - clamp(2rem, 9vw, 8rem)));
+    margin-inline: auto;
+    padding-block: clamp(1.5rem, 5.4vh, 3.75rem) clamp(2rem, 8vh, 5rem);
+}
+
+.masthead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4rem;
+    margin-bottom: clamp(1.25rem, 4.1vh, 2.5rem);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #d3b4833d;
+}
+
+.suit-mark {
+    display: grid;
+    flex: 0 0 2.875rem;
+    width: 2.875rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid #b28f60;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, #16271e 47%, #97754d 48% 50%, transparent 51%),
+        repeating-conic-gradient(#c19c66 0deg 13deg, #18251e 13deg 45deg);
+    box-shadow: 0 3px 9px #0005;
+    color: var(--gold);
+    font: 1.4rem/1 var(--display-font);
+}
+
+.page-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: .5rem;
+}
+
+.account-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: .35rem .9rem;
+    border: 1px solid #e8c0854d;
+    border-radius: .45rem;
+    color: var(--muted);
+    font-size: .875rem;
+    text-decoration: none;
+    transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+
+.account-link:hover {
+    border-color: var(--gold);
+    background-color: #e8c08515;
+    color: var(--text);
+}
+
+/* The photograph and the inset line are decorative layers. */
+.table-panel {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+    min-height: clamp(28rem, 60vh, 36rem);
+    padding: clamp(1.75rem, 6.4vw, 6rem);
+    border: 1px solid var(--outline);
+    border-radius: 1.125rem;
+    background: linear-gradient(112deg, #16281f, #08130e 64%);
+    box-shadow: 0 24px 60px #0007, 0 3px 12px #0005;
+    animation: panel-enter .45s ease-out both;
+}
+
+.table-panel::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+        linear-gradient(90deg, #102019 17%, #102019f2 35%, #10201913 62%, transparent),
+        linear-gradient(0deg, #080e0b37, transparent 32%),
+        url("poker-table.webp") right center / auto 112% no-repeat;
+    content: "";
+}
+
+.table-panel::after {
+    position: absolute;
+    inset: .5rem;
+    border: 1px solid #eac48935;
+    border-radius: .72rem;
+    pointer-events: none;
+    content: "";
+}
+
+.panel-content {
+    min-width: 0;
+    max-width: 35rem;
+}
+
+.panel-content::before {
+    display: block;
+    width: 2.75rem;
+    height: 2px;
+    margin-bottom: 1.125rem;
+    background: linear-gradient(90deg, var(--gold), #e8c0853b);
+    content: "";
+}
+
+.panel-title {
+    margin: 0 0 1.65rem;
+    color: var(--text);
+    font-family: var(--display-font);
+    font-size: clamp(2.75rem, 6vw, 5.2rem);
+    font-weight: 500;
+    line-height: .99;
+    letter-spacing: -.05em;
+    overflow-wrap: anywhere;
+}
+
+.hero-title {
+    margin-bottom: 2rem;
+    font-size: clamp(3.5rem, 8.6vw, 8rem);
+    letter-spacing: -.074em;
+}
+
+.table-panel--players {
+    align-items: start;
+    min-height: clamp(29rem, 58vh, 34rem);
+    padding-top: clamp(2.25rem, 5.3vw, 4.5rem);
+}
+
+.table-panel--players::before,
+.table-panel--registration::before {
+    background:
+        linear-gradient(90deg, #102019 25%, #102019f7 45%, #1020194d 68%, #10201912),
+        url("poker-table.webp") right center / auto 108% no-repeat;
+}
+
+.table-panel--players .panel-content {
+    width: min(100%, max(24rem, 58%));
+}
+
+.table-panel--registration .panel-content {
+    max-width: 27rem;
+}
+
+.table-panel--registration .panel-title {
+    max-width: 12ch;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .7rem;
+}
+
+.action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    min-height: 3rem;
+    width: fit-content;
+    max-width: 100%;
+    padding: .7rem 1.12rem;
+    border: 1px solid #ac91667a;
+    border-radius: .45rem;
+    background: #1f3428;
+    color: var(--text);
+    font: 650 .92rem/1.25 system-ui, sans-serif;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.action:hover {
+    border-color: var(--gold);
+    background-color: #2b4435;
+    transform: translateY(-1px);
+}
+
+.action:active {
+    transform: translateY(1px);
+}
+
+.action--primary {
+    border-color: #edcc98;
+    background-color: var(--gold);
+    box-shadow: inset 0 1px #fff5, 0 5px 16px #0004;
+    color: #211708;
+}
+
+.action--primary:hover {
+    background-color: var(--gold-light);
+    box-shadow: inset 0 1px #fff5, 0 6px 20px #e8c08524;
+}
+
+.action--danger {
+    border-color: #b57973;
+    background-color: #5a2729;
+    color: #fff2eb;
+}
+
+.action--danger:hover {
+    border-color: #dfa39b;
+    background-color: #753539;
+}
+
+.hero-action {
+    min-height: 3.375rem;
+    padding-inline: 1.3rem;
+}
+
+.hero-action::after {
+    width: .45rem;
+    height: .45rem;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(45deg);
+    content: "";
+}
+
+.action:disabled {
+    opacity: .64;
+    cursor: wait;
+}
+
+.action:focus-visible,
+.account-link:focus-visible,
+.player-form input:focus-visible {
+    outline: 2px solid var(--gold-light);
+    outline-offset: 3px;
+}
+
+.player-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1.35rem;
+    padding: clamp(1rem, 2.6vw, 1.5rem);
+    border: 1px solid #e8c08540;
+    border-radius: .75rem;
+    background: #0b1812e8;
+    animation: form-enter .23s ease-out both;
+}
+
+.player-form label {
+    display: grid;
+    align-content: start;
+    gap: .35rem;
+    color: var(--muted);
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.registration-form {
+    border-top: 2px solid var(--gold);
+}
+
+.registration-form .action {
+    width: 100%;
+}
+
+.manage-form,
+.edit-form {
+    max-width: 31rem;
+    border-top: 2px solid var(--gold);
+}
+
+.player-form fieldset {
+    display: grid;
+    min-width: 0;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.edit-form[hidden] {
+    display: none;
+}
+
+.edit-form .action {
+    justify-self: start;
+}
+
+.status-message.is-error {
+    border-inline-start-color: #de9e96;
+    color: #ffd4cb;
+}
+
+.player-form input {
+    width: 100%;
+    min-height: 3rem;
+    padding: .55rem .7rem;
+    border: 1px solid #577164;
+    border-radius: .35rem;
+    background: #0b120f;
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+}
+
+.status-message:empty {
+    display: none;
+}
+
+.status-message {
+    margin: .9rem 0 0;
+    padding: .65rem .8rem;
+    border-inline-start: 2px solid var(--gold);
+    background: #0a1913d9;
+    color: var(--text);
+}
+
+@keyframes panel-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes form-enter {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 46rem) {
+    .table-panel {
+        min-height: 0;
+        padding: clamp(11.25rem, 49vw, 16rem) clamp(1.3rem, 5vw, 2rem) 2rem;
+    }
+
+    .table-panel::before,
+    .table-panel--players::before,
+    .table-panel--registration::before {
+        bottom: auto;
+        height: clamp(12rem, 55vw, 17.5rem);
+        background:
+            linear-gradient(0deg, #14271e, #10201930 47%, #080d0a08),
+            url("poker-table.webp") right 52% / auto 142% no-repeat;
+    }
+
+    .table-panel--players .panel-content {
+        width: 100%;
+    }
+
+    .hero-title {
+        font-size: clamp(3.05rem, 13vw, 5.6rem);
+    }
+}
+
+@media (max-width: 30rem) {
+    .actions .action,
+    .player-form .action {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .table-panel,
+    .player-form {
+        animation: none;
+    }
+
+    .action,
+    .account-link {
+        transition: none;
+    }
+
+    .action:hover,
+    .action:active {
+        transform: none;
+    }
+}

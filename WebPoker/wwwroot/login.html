@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registration form — WebPoker</title>
+    <link rel="stylesheet" href="/CssStyle/poker.css">
+</head>
+<body>
+    <main class="site-frame">
+        <header class="masthead">
+            <span class="suit-mark" aria-hidden="true">♠</span>
+            <nav class="page-nav" aria-label="Pages">
+                <a class="account-link" href="/">Home</a>
+                <a class="account-link" href="/players.html">Players</a>
+            </nav>
+        </header>
+
+        <section class="table-panel table-panel--registration">
+            <div class="panel-content">
+                <h1 class="panel-title">Registration form</h1>
+
+                <button class="action action--primary" type="button" id="show-form"
+                        aria-expanded="false" aria-controls="registration-fields">Add Player</button>
+
+                <div id="registration-fields" hidden>
+                    <form class="player-form registration-form" id="player-form" method="post" action="/api/player">
+                        <label>
+                            Nickname
+                            <input name="nickname" autocomplete="username" required>
+                        </label>
+                        <label>
+                            Password
+                            <input name="password" type="password" autocomplete="new-password" required>
+                        </label>
+                        <button class="action action--primary" type="submit">Save</button>
+                    </form>
+                </div>
+
+                <p class="status-message" id="status" role="status"></p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const form = document.querySelector("#player-form");
+        const statusMessage = document.querySelector("#status");
+        const saveButton = form.querySelector('button[type="submit"]');
+        const addPlayerButton = document.querySelector("#show-form");
+        const registrationFields = document.querySelector("#registration-fields");
+
+        addPlayerButton.addEventListener("click", () => {
+            registrationFields.hidden = !registrationFields.hidden;
+            addPlayerButton.setAttribute("aria-expanded", String(!registrationFields.hidden));
+            if (!registrationFields.hidden) {
+                form.elements.nickname.focus();
+            }
+        });
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            saveButton.disabled = true;
+            statusMessage.textContent = "Adding player…";
+
+            try {
+                const response = await fetch(form.action, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        nickname: form.elements.nickname.value,
+                        password: form.elements.password.value
+                    })
+                });
+
+                if (response.ok) {
+                    const player = await response.json();
+                    statusMessage.textContent = `Player ${player.nickname} added. ID ${player.id}.`;
+                    form.reset();
+                } else if (response.status === 400) {
+                    statusMessage.textContent = "Enter a nickname and password.";
+                } else {
+                    statusMessage.textContent = `Could not add player (HTTP ${response.status}).`;
+                }
+            } catch {
+                statusMessage.textContent = "Could not connect to the server.";
+            } finally {
+                saveButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

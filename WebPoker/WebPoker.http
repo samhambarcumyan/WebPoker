@@ -1,0 +1,6 @@
+@WebPoker_HostAddress = http://localhost:5041
+
+GET {{WebPoker_HostAddress}}/api/player
+Accept: application/json
+
+###

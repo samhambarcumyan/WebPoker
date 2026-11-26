@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Players — WebPoker</title>
+    <link rel="stylesheet" href="/CssStyle/poker.css">
+    <script src="/players.js" defer></script>
+</head>
+<body>
+    <main class="site-frame">
+        <header class="masthead">
+            <span class="suit-mark" aria-hidden="true">♠</span>
+            <nav class="page-nav" aria-label="Pages">
+                <a class="account-link" href="/">Home</a>
+                <a class="account-link" href="/login.html">Registration form</a>
+            </nav>
+        </header>
+
+        <section class="table-panel table-panel--players">
+            <div class="panel-content">
+                <h1 class="panel-title">Players</h1>
+                <a class="action" href="/api/player">Get all players</a>
+
+                <form class="player-form manage-form" id="player-actions" aria-label="Manage a player">
+                    <fieldset>
+                        <label>Player ID
+                            <input name="playerId" type="number" min="1" max="2147483647" step="1"
+                                   inputmode="numeric" required>
+                        </label>
+                        <div class="actions">
+                            <button class="action action--primary" type="submit" name="operation"
+                                    value="nickname" aria-controls="nickname-form">Change nickname</button>
+                            <button class="action" type="submit" name="operation"
+                                    value="password" aria-controls="password-form">Change password</button>
+                            <button class="action action--danger" type="submit" name="operation"
+                                    value="delete">Delete Player</button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <p class="status-message" id="player-status" role="status"></p>
+
+                <form class="player-form edit-form" id="nickname-form" aria-label="Change nickname"
+                      data-change="nickname" method="post" hidden>
+                    <fieldset>
+                        <label>New nickname
+                            <input name="newNickname" autocomplete="off" required>
+                        </label>
+                        <button class="action action--primary" type="submit">Save nickname</button>
+                    </fieldset>
+                </form>
+
+                <form class="player-form edit-form" id="password-form" aria-label="Change password"
+                      data-change="password" method="post" hidden>
+                    <fieldset>
+                        <label>Current password
+                            <input name="currentPassword" type="password" autocomplete="current-password" required>
+                        </label>
+                        <label>New password
+                            <input name="newPassword" type="password" autocomplete="new-password" required>
+                        </label>
+                        <button class="action action--primary" type="submit">Save password</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
