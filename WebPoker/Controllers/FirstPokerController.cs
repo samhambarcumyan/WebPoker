@@ -101,7 +101,7 @@ namespace WebPoker.Controllers
                 hasher.VerifyHashedPassword(player, storedHash, request.CurrentPassword)
                     == PasswordVerificationResult.Failed)
             {
-                return BadRequest("Current password is incorrect.");
+                return BadRequest("Invalid password");
             }
 
             player.Password = hasher.HashPassword(player, request.NewPassword);
