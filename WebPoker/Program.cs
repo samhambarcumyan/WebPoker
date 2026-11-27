@@ -9,6 +9,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "WebPoker API v1");
+    });
 }
 
 app.UseHttpsRedirection();
@@ -31,5 +36,4 @@ using (var context = new PokerDbContext())
 {
     await context.Database.EnsureCreatedAsync();
 }
-
 app.Run();
