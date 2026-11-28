@@ -1,63 +1,67 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebPoker.DataBaseContext;
 using WebPoker.Models;
-using WebPoker.PostRecord;
-using Microsoft.AspNetCore.Identity;
 using WebPoker.PatchRequests;
+using WebPoker.PostRecord;
+using WebPoker.Repository;
+using WebPoker.RepositoryInterfaces;
+
 namespace WebPoker.Controllers
 {
     [Route("api/player")]
     [ApiController]
     public class FirstPokerController : ControllerBase
     {
-        public FirstPokerController(PokerDbContext context)
+        private readonly IRepositoryReader<PlayerResponse> _reader;
+        private readonly IPlayerCreator _creator;
+        private readonly IPlayerUpdater _updater;
+        private readonly IPlayerDeleter _deleter;
+
+        public FirstPokerController(
+            IRepositoryReader<PlayerResponse> reader,
+            IPlayerCreator creator,
+            IPlayerUpdater updater,
+            IPlayerDeleter deleter)
         {
-            _context = context;
+            _reader = reader;
+            _creator = creator;
+            _updater = updater;
+            _deleter = deleter;
         }
-        private readonly PokerDbContext _context;
+
         [HttpGet]
         public async Task<IActionResult> GetPlayers()
         {
-            var player = await _context.Players
-                .Select(player => new { player.Id, player.Nickname, player.Balance })
-                .ToListAsync();
-            return Ok(player);
+            var players = await _reader.GetAllAsync();
+            return Ok(players);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePlayer([FromBody] Request request)
         {
-            if (string.IsNullOrWhiteSpace(request.Nickname) || string.IsNullOrWhiteSpace(request.Password))
+            if (string.IsNullOrWhiteSpace(request.Nickname) ||
+                string.IsNullOrWhiteSpace(request.Password))
+            {
                 return BadRequest("Invalid Nickname or Password");
-            var player = new Player()
+            }
+
+            var player = new Player
             {
                 Nickname = request.Nickname.Trim()
             };
 
             var hasher = new PasswordHasher<Player>();
             player.Password = hasher.HashPassword(player, request.Password);
-            _context.Players.Add(player);
-            await _context.SaveChangesAsync();
-            return StatusCode(StatusCodes.Status201Created, new
-            {
-                player.Id,
-                player.Nickname,
-                player.Balance
-            });
+
+            var createdPlayer = await _creator.CreateAsync(player);
+            return StatusCode(StatusCodes.Status201Created, createdPlayer);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeletePlayer(int Id)
+        public async Task<IActionResult> DeletePlayer(int id)
         {
-            var player = await _context.Players.FindAsync(Id);
-            if (player == null)
+            if (!await _deleter.DeleteAsync(id))
                 return NotFound();
-
-            _context.Players.Remove(player);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -70,12 +74,13 @@ namespace WebPoker.Controllers
             if (string.IsNullOrWhiteSpace(request.NewNickname))
                 return BadRequest("Enter a nickname.");
 
-            var player = await _context.Players.FindAsync(id);
-            if (player == null)
+            var player = await _updater.FindForUpdateAsync(id);
+            if (player is null)
                 return NotFound();
 
             player.Nickname = request.NewNickname.Trim();
-            await _context.SaveChangesAsync();
+            await _updater.SaveChangesAsync();
+
             return NoContent();
         }
 
@@ -90,7 +95,7 @@ namespace WebPoker.Controllers
                 return BadRequest("Enter both the current and new passwords.");
             }
 
-            var player = await _context.Players.FindAsync(id);
+            var player = await _updater.FindForUpdateAsync(id);
             if (player is null)
                 return NotFound();
 
@@ -105,11 +110,9 @@ namespace WebPoker.Controllers
             }
 
             player.Password = hasher.HashPassword(player, request.NewPassword);
-            await _context.SaveChangesAsync();
+            await _updater.SaveChangesAsync();
 
             return NoContent();
         }
-
-
     }
 }
