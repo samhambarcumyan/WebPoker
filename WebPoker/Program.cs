@@ -1,8 +1,18 @@
 using WebPoker.DataBaseContext;
+using WebPoker.Models;
+using WebPoker.PlayersRepository;
+using WebPoker.Repository;
+using WebPoker.RepositoryInterfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<PokerDbContext>();
+builder.Services.AddScoped<PlayerRepository>();
+builder.Services.AddScoped<IRepositoryReader<PlayerResponse>>(services => services.GetRequiredService<PlayerRepository>());
+builder.Services.AddScoped<IPlayerCreator>(services => services.GetRequiredService<PlayerRepository>());
+builder.Services.AddScoped<IPlayerUpdater>(services => services.GetRequiredService<PlayerRepository>());
+builder.Services.AddScoped<IPlayerDeleter>(services => services.GetRequiredService<PlayerRepository>());
 
 var app = builder.Build();
 
